@@ -1,0 +1,9 @@
+*swp
+*py[c,0]
+.DS_Store
+*.sqlite3
+geodb/*
+todo
+*node_modules*
+wikiweb/jsapp/dist/*
+wikiweb/jsapp/typings/*

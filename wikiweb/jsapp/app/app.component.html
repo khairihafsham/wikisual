@@ -1,0 +1,39 @@
+<style type="text/css" media="screen">
+div.row {
+  padding-bottom: 50px;
+}
+</style>
+
+<h1>{{title}}</h1>
+
+<h2>Daily Top Titles</h2>
+
+<div class="row">
+  <div class="col-log-12">
+    <wiki-chart subscription="daily-top-titles"
+                label="Daily Top Changes by Titles">
+    </wiki-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <wiki-table subscription="daily-top-titles"></wiki-table>
+  </div>
+</div>
+
+<h2>Daily Top Countries (anonymous users only)</h2>
+
+<div class="row">
+  <div class="col-log-12">
+    <wiki-chart subscription="daily-top-countries"
+                label="Daily Top Changes by Countries">
+    </wiki-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <wiki-table subscription="daily-top-countries"></wiki-table>
+  </div>
+</div>
