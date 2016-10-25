@@ -16,8 +16,9 @@ class Command(BaseCommand):
         while True:
             data = json.dumps({
                 'charts': {
-                    'daily-top-countries': service.get_daily_top_countries(),
-                    'daily-top-titles': service.get_daily_top_titles_filtered()
+                    'daily-top-countries': service.get_top_countries_by_date(),
+                    'daily-top-titles':
+                        service.get_top_titles_by_date_filtered()
                 }
             })
 
