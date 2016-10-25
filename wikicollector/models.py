@@ -8,5 +8,5 @@ class RecentChange(models.Model):
     user = models.TextField()
     bot = models.BooleanField()
     type = models.CharField(max_length=256)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
