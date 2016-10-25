@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {WebSocketService} from './websocket.service';
-import {WebSocketSubject} from 'rxjs/Observable/dom/WebSocketSubject';
+import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 import {WS_LIST} from './ws-list';
 
 @Component({
