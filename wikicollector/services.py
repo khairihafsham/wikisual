@@ -1,16 +1,15 @@
+from typing import Union
+
 from django.db.models import Count, F
+import udatetime as datetime
 
 from wikicollector.models import RecentChange
-
-import udatetime as datetime
 
 
 class RecentChangeService(object):
 
     def get_top_field_by_date(self, field: str,
-                                    date: str=datetime.utcnow()
-                                                      .date()
-                                                      .isoformat(),
+                                    date: Union[str, None]=None,
                                     top_count: int = 10,
                                     return_query=False) -> list:
         """
@@ -19,6 +18,9 @@ class RecentChangeService(object):
 
         :return: list in format  of [{field: str, total: int}]
         """
+        if date is None:
+            date = datetime.utcnow().date().isoformat()
+
         exclude = {field: ''}
 
         query = RecentChange.objects.all() \
@@ -37,10 +39,7 @@ class RecentChangeService(object):
 
     def get_top_user_by_date_filtered(self,
                                       top_count: int = 10,
-                                      date: str=datetime
-                                        .utcnow()
-                                        .date()
-                                        .isoformat()) -> list:
+                                      date: Union[str, None]=None) -> list:
         """
         get the top users who made changes in RecentChange table for today
         today is in UTC timezone
@@ -57,10 +56,7 @@ class RecentChangeService(object):
 
     def get_top_countries_by_date(self,
                                   top_count: int = 10,
-                                  date: str=datetime
-                                      .utcnow()
-                                      .date()
-                                      .isoformat()) -> list:
+                                  date: Union[str, None]=None) -> list:
         """
         get the top countries from RecentChange table for today
         today is in UTC timezone
@@ -73,10 +69,7 @@ class RecentChangeService(object):
 
     def get_top_titles_by_date_filtered(self,
                                         top_count: int = 10,
-                                        date: str=datetime
-                                            .utcnow()
-                                            .date()
-                                            .isoformat()) -> list:
+                                        date: Union[str, None]=None) -> list:
         """
         get the top edits in RecentChange table for today
         today is in UTC timezone
