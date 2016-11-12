@@ -1,4 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component,
+        OnChanges,
+        OnInit,
+        SimpleChanges,
+        Input} from '@angular/core';
 import {WebSocketService} from './websocket.service';
 import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 import {WS_LIST} from './ws-list';
@@ -7,16 +11,15 @@ import {WS_LIST} from './ws-list';
   selector: 'wiki-chart',
   templateUrl: 'static/app/wiki-chart.html'
 })
-export class WikiChartComponent implements OnInit {
-  constructor(private webSocketService: WebSocketService) {}
-
-  private subject: WebSocketSubject<any>;
-
+export class WikiChartComponent implements OnChanges {
   @Input()
   subscription: string;
 
   @Input()
   label: string = '';
+
+  @Input()
+  public data = [];
 
   public type = 'horizontalBar';
 
@@ -67,14 +70,19 @@ export class WikiChartComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  private subject: WebSocketSubject<any>;
+
+  constructor(private webSocketService: WebSocketService) {}
+
+  ngOnInit() {
     this.chartData.datasets[0].label = this.label;
-    this.subject = this.webSocketService.getSubject();
-    this.subject.subscribe(
-      e => {
-        var copy = Object.assign({}, this.chartData);
-        var data = e.charts[this.subscription];
-        copy.labels = data.map(v => { 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data']) {
+      var copy = Object.assign({}, this.chartData);
+      var data = changes['data'].currentValue;
+      copy.labels = data.map(v => { 
           if (v.name.length > 20)  {
             return v.name.slice(0, 20) + '...';
           }
@@ -86,9 +94,6 @@ export class WikiChartComponent implements OnInit {
         );
 
         this.chartData = copy;
-      },
-      function (e) { console.log('onError: ' + e.message); },
-      function () { console.log('onCompleted'); }
-    );
+    }
   }
 }
