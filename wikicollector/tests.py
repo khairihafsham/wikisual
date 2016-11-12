@@ -74,3 +74,21 @@ class RecentChangeServiceTestCase(TransactionTestCase):
                                                          top_count=3)
 
         self.assertNotEquals(expected, result)
+
+    def test_get_top_title_hourly_filtered(self):
+        service = RecentChangeService()
+        expected = [
+            {"hour": 16, "name": "USS Hobson (DD-464)", "total": 22},
+            {"hour": 16, "name": "Jimmy Perry", "total": 21},
+            {"hour": 16, "name": "2018 in film", "total": 19},
+            {"hour": 15, "name": "Jessica Drake", "total": 22},
+            {"hour": 15, "name": "British Sand Ace Championship", "total": 21},
+            {"hour": 15, "name": "List of Catholic saints", "total": 20}
+        ]
+
+        result = service.get_top_titles_hourly_filtered(date='2016-10-23',
+                                                        top_count=3,
+                                                        start_hour=15,
+                                                        end_hour=16)
+
+        self.assertEquals(expected, result)
