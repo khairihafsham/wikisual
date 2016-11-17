@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
-    hostname: wookie-web
+    hostname: ws-web
     command: /usr/local/bin/python ./manage.py runserver 0.0.0.0:8080
     ports:
       - "8080:8080"
@@ -20,26 +20,40 @@ services:
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
-    hostname: wookie-web
+    hostname: ws-rcstream
     command: /usr/local/bin/python ./manage.py rcstream
     depends_on:
       - postgres.local
+    restart: always
 
-  push-to-group:
+  push-to-daily-group:
     image: wikisual_web
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
-    hostname: wookie-web
-    command: /usr/local/bin/python ./manage.py push-to-group
+    hostname: ws-push-to-daily-group
+    command: /usr/local/bin/python ./manage.py push-to-daily-group
+    depends_on:
+      - postgres.local
+      - redis.local
+
+  push-to-hourly-group:
+    image: wikisual_web
+    volumes:
+      - .:/opt/wikisual
+    working_dir: /opt/wikisual
+    hostname: ws-push-to-hourly-group 
+    command: /usr/local/bin/python ./manage.py push-to-hourly-group
     depends_on:
       - postgres.local
       - redis.local
 
   postgres.local:
     image: postgres:9.6
+    hostname: ws-postgres
     ports:
       - "5432:5432"
 
   redis.local:
+    hostname: ws-redis
     image: redis
