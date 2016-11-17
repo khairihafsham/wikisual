@@ -1,0 +1,31 @@
+<h2>Daily Top Titles</h2>
+
+<div class="row">
+  <div class="col-log-12">
+    <wiki-chart [data]="dailyTopTitlesData"
+                label="Daily Top Changes by Titles">
+    </wiki-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <wiki-table [data]="dailyTopTitlesData"></wiki-table>
+  </div>
+</div>
+
+<h2>Daily Top Countries (anonymous users only)</h2>
+
+<div class="row">
+  <div class="col-log-12">
+    <wiki-chart [data]="dailyTopCountriesData"
+                label="Daily Top Changes by Countries">
+    </wiki-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <wiki-table [data]="dailyTopCountriesData"></wiki-table>
+  </div>
+</div>

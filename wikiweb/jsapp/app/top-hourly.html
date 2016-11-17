@@ -1,0 +1,23 @@
+<br>
+<h3>
+  Top titles for hour between {{startHour}} and {{endHour}} in UTC timezone
+</h3>
+<button class="btn" (click)="goToCurrentHour()">Current Hour</button>
+<button class="btn" (click)="goToPreviousHour()">Previous Hour</button>
+<button class="btn" (click)="goToNextHour()">Next Hour</button>
+
+<h2>Hourly Top Titles</h2>
+
+<div class="row">
+  <div class="col-log-12">
+    <wiki-chart [data]="topTitlesData"
+                label="Hourly Top Changes by Titles">
+    </wiki-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <wiki-table [data]="topTitlesData"></wiki-table>
+  </div>
+</div>
