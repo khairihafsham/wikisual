@@ -89,7 +89,7 @@ class RecentChangeService(object):
         return [i for i in query[:top_count]]
 
     def get_top_titles_hourly_filtered(self,
-                                       top_count: int=3,
+                                       top_count: int=10,
                                        date: Union[str, None]=None,
                                        start_hour: int=0,
                                        end_hour: int=23) -> list:
