@@ -16,6 +16,7 @@ export class TopDailyComponent implements OnInit {
   constructor(private webSocketService: WebSocketService) {}
 
   ngOnInit(): void {
+    this.webSocketService.connect('daily-top-charts');
     this.subject = this.webSocketService.getSubject();
     this.subject.subscribe(
       e => {
