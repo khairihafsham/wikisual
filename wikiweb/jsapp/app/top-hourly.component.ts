@@ -38,6 +38,7 @@ export class TopHourlyComponent implements OnInit {
       function (e) { console.log('onError: ' + e.message); },
       function () { console.log('onCompleted'); }
     );
+    this.subject.next('');
   }
 
   reloadChartData(hour: number): void {

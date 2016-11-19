@@ -26,5 +26,6 @@ export class TopDailyComponent implements OnInit {
       function (e) { console.log('onError: ' + e.message); },
       function () { console.log('onCompleted'); }
     );
+    this.subject.next('');
   }
 }
