@@ -12,5 +12,9 @@ setup-geodb:
 		gunzip ./geodb/GeoLite2-City.mmdb.gz; \
 	fi
 
+unit_test:
+	@docker-compose run --rm web bash -c \
+		"coverage run --source='.' manage.py test && coverage report --omit=manage.py,*urls.py,*wsgi.py"
+
 %:
 	@:
