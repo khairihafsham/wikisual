@@ -9,6 +9,7 @@
      <!-- Polyfill(s) for older browsers -->
     <script src="static/core-js/client/shim.min.js"></script>
     <script src="static/zone.js/dist/zone.js"></script>
+    {% if DEVMODE %}
     <script src="static/reflect-metadata/Reflect.js"></script>
     <script src="static/systemjs/dist/system.src.js"></script>
     <!-- 2. Configure SystemJS -->
@@ -16,6 +17,11 @@
     <script>
       System.import('app').catch(function(err){ console.error(err); });
     </script>
+    {% else %}
+    <script type="text/javascript" charset="utf-8">
+      window.module = 'aot';
+    </script>
+    {% endif %}
     <style type="text/css" media="screen">
       div.row {
         padding-bottom: 50px;
@@ -32,4 +38,7 @@
       </div>
     </div>
   </body>
+  {% if not DEVMODE %}
+  <script src="static/build.js" type="text/javascript" charset="utf-8"></script>
+  {% endif %}
 </html>
