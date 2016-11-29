@@ -5,7 +5,7 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 export class WebSocketService {
   protected subject: WebSocketSubject<any>;
 
-  connect(path): WebSocketSubject<any> {
+  connect(path: string): WebSocketSubject<any> {
     var url = `ws://${window.location.host}/${path}`;
     console.log(`connecting to ${url}`);
     this.subject = WebSocketSubject.create(url);

@@ -5,11 +5,11 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 
 @Component({
   selector: 'top-daily',
-  templateUrl: 'static/app/top-daily.html'
+  templateUrl: 'top-daily.html'
 })
 export class TopDailyComponent implements OnInit {
-  public dailyTopCountriesData = [];
-  public dailyTopTitlesData = [];
+  public dailyTopCountriesData: any = [];
+  public dailyTopTitlesData: any = [];
 
   private subject: WebSocketSubject<any>;
 
