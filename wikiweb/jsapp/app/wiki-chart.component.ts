@@ -9,7 +9,7 @@ import {WS_LIST} from './ws-list';
 
 @Component({
   selector: 'wiki-chart',
-  templateUrl: 'static/app/wiki-chart.html'
+  templateUrl: 'wiki-chart.html'
 })
 export class WikiChartComponent implements OnChanges {
   @Input()
@@ -19,11 +19,11 @@ export class WikiChartComponent implements OnChanges {
   label: string = '';
 
   @Input()
-  public data = [];
+  public data: Array<any> = [];
 
   public type = 'horizontalBar';
 
-  public chartData = {
+  public chartData: any = {
     labels: [],
     datasets: [
       {
@@ -82,16 +82,14 @@ export class WikiChartComponent implements OnChanges {
     if (changes['data']) {
       var copy = Object.assign({}, this.chartData);
       var data = changes['data'].currentValue;
-      copy.labels = data.map(v => { 
+      copy.labels = data.map((v: any): any => { 
           if (v.name.length > 20)  {
             return v.name.slice(0, 20) + '...';
           }
 
           return v.name; 
         });
-        copy.datasets[0].data = data.map(
-          v => { return v.total; }
-        );
+        copy.datasets[0].data = data.map((v: any): any => { return v.total; });
 
         this.chartData = copy;
     }

@@ -5,21 +5,21 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 
 @Component({
   selector: 'top-hourly',
-  templateUrl: 'static/app/top-hourly.html'
+  templateUrl: 'top-hourly.html'
 })
 export class TopHourlyComponent implements OnInit {
   private subject: WebSocketSubject<any>;
 
-  public startHour = '0000';
-  public endHour = '0100';
+  public startHour: string = '0000';
+  public endHour: string = '0100';
 
-  public max = 23;
-  public min = 0;
+  public max: number = 23;
+  public min: number = 0;
 
-  public hourlyTopTitlesData = [];
-  public topTitlesData = [];
+  public hourlyTopTitlesData: Array<any> = [];
+  public topTitlesData: Array<any> = [];
 
-  public loadedOnce = false;
+  public loadedOnce: boolean = false;
 
   constructor(private webSocketService: WebSocketService) {}
 

@@ -8,3 +8,5 @@ todo*
 wikiweb/jsapp/dist/*
 wikiweb/jsapp/typings/*
 .coverage
+*override.yaml
+wikiweb/jsapp/aot/*

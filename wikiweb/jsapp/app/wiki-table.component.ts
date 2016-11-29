@@ -6,14 +6,14 @@ import {WS_LIST} from './ws-list';
 
 @Component({
   selector: 'wiki-table',
-  templateUrl: 'static/app/wiki-table.html'
+  templateUrl: 'wiki-table.html'
 })
 export class WikiTable implements OnChanges{
   @Input()
   subscription: string;
 
   @Input()
-  data = []; 
+  data: any = []; 
 
   public subject: WebSocketSubject<any>;
   public headers = ['Name', 'Total'];
@@ -26,7 +26,7 @@ export class WikiTable implements OnChanges{
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
-      this.data = changes['data'].currentValue.map(v => { 
+      this.data = changes['data'].currentValue.map((v: any): any => { 
         return {
           url: this.nameToURL(v.name),
           name: v.name,

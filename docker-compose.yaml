@@ -4,6 +4,8 @@ services:
   web:
     build: ./
     image: wikisual_web
+    env_file:
+      - ./docker-compose/wikisual.env
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
@@ -17,6 +19,8 @@ services:
 
   rcstream:
     image: wikisual_web
+    env_file:
+      - ./docker-compose/wikisual.env
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
@@ -28,6 +32,8 @@ services:
 
   push-to-daily-group:
     image: wikisual_web
+    env_file:
+      - ./docker-compose/wikisual.env
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
@@ -39,6 +45,8 @@ services:
 
   push-to-hourly-group:
     image: wikisual_web
+    env_file:
+      - ./docker-compose/wikisual.env
     volumes:
       - .:/opt/wikisual
     working_dir: /opt/wikisual
