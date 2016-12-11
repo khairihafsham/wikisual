@@ -1,14 +1,76 @@
 from typing import Union
+from ipaddress import ip_address
+from collections import namedtuple
+
+import udatetime as datetime
+import geoip2.database
+from geoip2.errors import AddressNotFoundError
 
 from django.db.models import Count, F
 from django.db import connection
-import udatetime as datetime
+from django.conf import settings
 
 from wikicollector.models import RecentChange
 from wikicollector.utils import dictfetchall
 
+GeoData = namedtuple('GeoData', ['city', 'country'])
+
+
+class GeoService(object):
+    """
+    just a wrapper class for geoip2 to help load the database and hide the
+    internal for getting the geo data from ip address
+    """
+    def __init__(self, config):
+        """
+        :config: object preferable the one from django.conf.settings
+        """
+        self._geo_reader = None
+        self.database_path = config.GEOSERVICE.get('DATABASE_PATH')
+
+    @property
+    def reader(self):
+        """
+        if _geo_reader is None, create an instance of geoip2.database.Reader
+        and assign to _geo_reader
+
+        :returns: instance of geoip2.database.Reader
+        """
+        if self._geo_reader is None:
+            self._geo_reader = geoip2.database.Reader(self.database_path)
+
+        return self._geo_reader
+
+    def translate_ip(self, ip):
+        """
+        for a given ip address this method will try to return the corresponding
+        country and city.
+
+        internally, it handles AddressNotFoundError from geoip2 and ValueError
+        from ipadress.ip_address and will return an empty GeoData when either
+        of those two is raised
+
+        :ip: string ip compliant
+        :returns: GeoData
+        """
+        try:
+            ip_address(ip)
+            result = self.reader.city(ip)
+            return GeoData(city=result.city.name, country=result.country.name)
+        except (ValueError, AddressNotFoundError) as e:
+            return GeoData(city='', country='')
+
 
 class RecentChangeService(object):
+    def __init__(self):
+        self._geo_service = None
+
+    @property
+    def geo_service(self):
+        if self._geo_service is None:
+            self._geo_service = GeoService(settings)
+
+        return self._geo_service
 
     def get_top_field_by_date(self, field: str,
                                     date: Union[str, None]=None,
@@ -136,3 +198,35 @@ order by hour desc, total desc;
         cursor.execute(sql)
 
         return dictfetchall(cursor)
+
+    def save_recent_change(self, data):
+        """
+        receives data as dict. expected data structure to match the one from
+        Wikipedia's RecentChange stream API.
+
+        sometimes 'user' is an ip_address, translate it to city and country
+        whenever possible
+
+        converts 'timestamp' into Datetime in UTC timezone
+
+        saves all those data into database via RecentChange model
+
+        :data: dict
+        """
+        geo_data = self.geo_service.translate_ip(data['user'])
+
+        dt = datetime.fromtimestamp(data['timestamp'],
+                                    datetime.TZFixedOffset(0))
+
+        params = {
+            "title": data['title'],
+            "country": geo_data.country,
+            "city": geo_data.city,
+            "user": data['user'],
+            "bot": data['bot'],
+            "type": data['type'],
+            "timestamp": dt.isoformat()
+        }
+
+        rc = RecentChange(**params)
+        rc.save()

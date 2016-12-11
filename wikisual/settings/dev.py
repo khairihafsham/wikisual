@@ -157,3 +157,7 @@ TEMPLATES = [
 ]
 
 DEVMODE = True
+
+GEOSERVICE = {
+    'DATABASE_PATH': '/opt/wikisual/geodb/GeoLite2-City.mmdb'
+}
