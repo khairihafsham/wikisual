@@ -1,11 +1,66 @@
 from typing import Union
+from ipaddress import ip_address
+from collections import namedtuple
+import time
+
+import udatetime as datetime
+import geoip2.database
+from geoip2.errors import AddressNotFoundError
 
 from django.db.models import Count, F
 from django.db import connection
-import udatetime as datetime
+from django.conf import settings
 
 from wikicollector.models import RecentChange
 from wikicollector.utils import dictfetchall
+from wikicollector.exceptions import NotGeoIpReaderException
+
+GeoData = namedtuple('GeoData', ['city', 'country'])
+
+
+class GeoService(object):
+    """
+    just a wrapper class for geoip2 to help load the database and hide the
+    internal for getting the geo data from ip address
+    """
+    def __init__(self, config):
+        """
+        :config: object preferable the one from django.conf.settings
+        """
+        self._geo_reader = None
+        self.database_path = config.GEOSERVICE.get('DATABASE_PATH')
+
+    @property
+    def reader(self):
+        """
+        if _geo_reader is None, create an instance of geoip2.database.Reader
+        and assign to _geo_reader
+
+        :returns: instance of geoip2.database.Reader
+        """
+        if self._geo_reader is None:
+            self._geo_reader = geoip2.database.Reader(self.database_path)
+
+        return self._geo_reader
+
+    def translate_ip(self, ip):
+        """
+        for a given ip address this method will try to return the corresponding
+        country and city.
+
+        internally, it handles AddressNotFoundError from geoip2 and ValueError
+        from ipadress.ip_address and will return an empty GeoData when either
+        of those two is raised
+
+        :ip: string ip compliant
+        :returns: GeoData
+        """
+        try:
+            ip_address(ip)
+            result = self.reader.city(ip)
+            return GeoData(city=result.city.name, country=result.country.name)
+        except (ValueError, AddressNotFoundError) as e:
+            return GeoData(city='', country='')
 
 
 class RecentChangeService(object):

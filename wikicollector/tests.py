@@ -1,8 +1,14 @@
 from datetime import datetime
+from unittest.mock import patch, MagicMock
 
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, TestCase
+from django.conf import settings
 
-from wikicollector.services import RecentChangeService
+from geoip2.database import Reader
+from geoip2.errors import AddressNotFoundError
+
+from wikicollector.services import RecentChangeService, GeoService, GeoData
+from wikicollector import services
 
 
 class RecentChangeServiceTestCase(TransactionTestCase):
@@ -92,3 +98,44 @@ class RecentChangeServiceTestCase(TransactionTestCase):
                                                         end_hour=16)
 
         self.assertEquals(expected, result)
+
+
+class GeoServiceTest(TestCase):
+    @patch('geoip2.database.Reader', spec=Reader)
+    def test_reader_instanceof_geoip_reader(self, MockReader):
+        geo = GeoService(settings)
+        self.assertIsInstance(geo.reader, Reader)
+
+    @patch('geoip2.database.Reader', spec=Reader)
+    @patch('ipaddress.ip_address')
+    def test_translate_ip_returns_empty_geodata_on_valueerror(
+            self,
+            mock_ip_address,
+            MockReader):
+        mock_ip_address.side_effect = ValueError()
+        geo = GeoService(settings)
+        geodata = GeoData(city='', country='')
+        self.assertEquals(geo.translate_ip('notIP'), geodata)
+
+    @patch('geoip2.database.Reader')
+    def test_translate_ip_returns_empty_geodata_on_addressnotfounderror(
+            self,
+            MockReader):
+        MockReader.side_effect = AddressNotFoundError()
+        geo = GeoService(settings)
+        geodata = GeoData(city='', country='')
+        self.assertEquals(geo.translate_ip('127.0.0.1'), geodata)
+
+    def test_translate_ip_returns_complete_geodata(self):
+        city = MagicMock()
+        city.city.name = 'Kuala Lumpur'
+        city.country.name = 'Malaysia'
+        reader = MagicMock()
+        reader.city = MagicMock(return_value=city)
+        MockReader = MagicMock(return_value=reader)
+
+        with patch('geoip2.database.Reader', new=MockReader):
+            geo = services.GeoService(settings)
+            geodata = GeoData(city='Kuala Lumpur', country='Malaysia')
+            result = geo.translate_ip('127.0.0.1')
+            self.assertEquals(result, geodata)
