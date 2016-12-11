@@ -10,3 +10,4 @@ wikiweb/jsapp/typings/*
 .coverage
 *override.yaml
 wikiweb/jsapp/aot/*
+htmlcov/*
