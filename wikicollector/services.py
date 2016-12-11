@@ -1,7 +1,6 @@
 from typing import Union
 from ipaddress import ip_address
 from collections import namedtuple
-import time
 
 import udatetime as datetime
 import geoip2.database
@@ -13,7 +12,6 @@ from django.conf import settings
 
 from wikicollector.models import RecentChange
 from wikicollector.utils import dictfetchall
-from wikicollector.exceptions import NotGeoIpReaderException
 
 GeoData = namedtuple('GeoData', ['city', 'country'])
 
@@ -64,6 +62,15 @@ class GeoService(object):
 
 
 class RecentChangeService(object):
+    def __init__(self):
+        self._geo_service = None
+
+    @property
+    def geo_service(self):
+        if self._geo_service is None:
+            self._geo_service = GeoService(settings)
+
+        return self._geo_service
 
     def get_top_field_by_date(self, field: str,
                                     date: Union[str, None]=None,
@@ -191,3 +198,35 @@ order by hour desc, total desc;
         cursor.execute(sql)
 
         return dictfetchall(cursor)
+
+    def save_recent_change(self, data):
+        """
+        receives data as dict. expected data structure to match the one from
+        Wikipedia's RecentChange stream API.
+
+        sometimes 'user' is an ip_address, translate it to city and country
+        whenever possible
+
+        converts 'timestamp' into Datetime in UTC timezone
+
+        saves all those data into database via RecentChange model
+
+        :data: dict
+        """
+        geo_data = self.geo_service.translate_ip(data['user'])
+
+        dt = datetime.fromtimestamp(data['timestamp'],
+                                    datetime.TZFixedOffset(0))
+
+        params = {
+            "title": data['title'],
+            "country": geo_data.country,
+            "city": geo_data.city,
+            "user": data['user'],
+            "bot": data['bot'],
+            "type": data['type'],
+            "timestamp": dt.isoformat()
+        }
+
+        rc = RecentChange(**params)
+        rc.save()
