@@ -10,8 +10,9 @@
 
 ##Usage:
 
-1. cd wikiweb/jsapp && npm install
-2. cd wikiweb/jsapp && tsc
-2. docker-compose build
-3. docker-compose up -d
-4. access localhost:8080
+1. make setup-geodb 
+2. cd wikiweb/jsapp && npm install
+3. cd wikiweb/jsapp && tsc
+4. docker-compose build
+5. docker-compose up -d
+6. access localhost:8080

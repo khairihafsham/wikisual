@@ -1,4 +1,3 @@
-from typing import Union
 from ipaddress import ip_address
 from collections import namedtuple
 
@@ -72,10 +71,10 @@ class RecentChangeService(object):
 
         return self._geo_service
 
-    def get_top_field_by_date(self, field: str,
-                                    date: Union[str, None]=None,
-                                    top_count: int=10,
-                                    return_query=False) -> list:
+    def get_top_field_by_date(self, field,
+                                    date=None,
+                                    top_count=10,
+                                    return_query=False):
         """
         a generic method to get top counts for any particular field from the
         table RecentChange
@@ -101,9 +100,7 @@ class RecentChangeService(object):
 
         return [i for i in query[:top_count]]
 
-    def get_top_user_by_date_filtered(self,
-                                      top_count: int=10,
-                                      date: Union[str, None]=None) -> list:
+    def get_top_user_by_date_filtered(self, top_count=10, date=None):
         """
         get the top users who made changes in RecentChange table for today
         today is in UTC timezone
@@ -118,9 +115,7 @@ class RecentChangeService(object):
 
         return [i for i in query[:top_count]]
 
-    def get_top_countries_by_date(self,
-                                  top_count: int=10,
-                                  date: Union[str, None]=None) -> list:
+    def get_top_countries_by_date(self, top_count=10, date=None):
         """
         get the top countries from RecentChange table for today
         today is in UTC timezone
@@ -131,9 +126,7 @@ class RecentChangeService(object):
                                           date=date,
                                           top_count=top_count)
 
-    def get_top_titles_by_date_filtered(self,
-                                        top_count: int=10,
-                                        date: Union[str, None]=None) -> list:
+    def get_top_titles_by_date_filtered(self, top_count=10, date=None):
         """
         get the top edits in RecentChange table for today
         today is in UTC timezone
@@ -151,10 +144,10 @@ class RecentChangeService(object):
         return [i for i in query[:top_count]]
 
     def get_top_titles_hourly_filtered(self,
-                                       top_count: int=10,
-                                       date: Union[str, None]=None,
-                                       start_hour: int=0,
-                                       end_hour: int=23) -> list:
+                                       top_count=10,
+                                       date=None,
+                                       start_hour=0,
+                                       end_hour=23):
         """
         query the RecentChange.table
         :returns: [{hour: hour, name: title, total: total}, ..]
