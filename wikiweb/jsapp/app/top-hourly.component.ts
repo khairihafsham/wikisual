@@ -2,10 +2,13 @@ import {Component, OnInit} from '@angular/core';
 
 import {WebSocketService} from './websocket.service';
 import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
+import {UpdateNotificationService} from './update-notification.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'top-hourly',
-  templateUrl: 'top-hourly.html'
+  templateUrl: 'top-hourly.component.html',
+  providers: [UpdateNotificationService]
 })
 export class TopHourlyComponent implements OnInit {
   private subject: WebSocketSubject<any>;
@@ -21,7 +24,10 @@ export class TopHourlyComponent implements OnInit {
 
   public loadedOnce: boolean = false;
 
-  constructor(private webSocketService: WebSocketService) {}
+  constructor(
+    private webSocketService: WebSocketService,
+    private updateNotificationService: UpdateNotificationService
+  ) {}
 
   ngOnInit() {
     this.webSocketService.connect('hourly-top-charts');
@@ -34,6 +40,7 @@ export class TopHourlyComponent implements OnInit {
           this.setHours(this.getLatestDataHour());
           this.loadedOnce = true;
         }
+        this.updateNotificationService.notify(true);
       },
       function (e) { console.log('onError: ' + e.message); },
       function () { console.log('onCompleted'); }
