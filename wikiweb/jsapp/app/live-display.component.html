@@ -1,0 +1,16 @@
+<style type="text/css" media="screen">
+span#live-signal {
+  color: red;
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+</style>
+<div>
+  <h4>
+    <span id="live-signal">LIVE</span>
+    <small>last updated <span id="last-updated">{{lastUpdated}}</span></small>
+  </h4>
+</div>

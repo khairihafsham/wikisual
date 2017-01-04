@@ -9,6 +9,7 @@ import {WikiTable} from './wiki-table.component';
 import {WebSocketService} from './websocket.service';
 import {TopDailyComponent} from './top-daily.component';
 import {TopHourlyComponent} from './top-hourly.component';
+import {LiveDisplayComponent} from './live-display.component';
 import {routing} from './app.routing';
 
 @NgModule({
@@ -25,7 +26,8 @@ import {routing} from './app.routing';
     WikiChartComponent,
     WikiTable,
     TopDailyComponent,
-    TopHourlyComponent
+    TopHourlyComponent,
+    LiveDisplayComponent
   ],
   bootstrap: [AppComponent]
 })

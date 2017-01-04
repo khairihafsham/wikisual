@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 
 import {WebSocketService} from './websocket.service';
 import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
+import {UpdateNotificationService} from './update-notification.service';
 
 @Component({
   moduleId: module.id,
   selector: 'top-daily',
-  templateUrl: 'top-daily.component.html'
+  templateUrl: 'top-daily.component.html',
+  providers: [UpdateNotificationService]
 })
 export class TopDailyComponent implements OnInit {
   public dailyTopCountriesData: any = [];
@@ -14,7 +16,10 @@ export class TopDailyComponent implements OnInit {
 
   private subject: WebSocketSubject<any>;
 
-  constructor(private webSocketService: WebSocketService) {}
+  constructor(
+    private webSocketService: WebSocketService,
+    private updateNotificationService: UpdateNotificationService
+  ) {}
 
   ngOnInit(): void {
     this.webSocketService.connect('daily-top-charts');
@@ -23,6 +28,7 @@ export class TopDailyComponent implements OnInit {
       e => {
         this.dailyTopTitlesData = e.charts['daily-top-titles'];
         this.dailyTopCountriesData = e.charts['daily-top-countries'];
+        this.updateNotificationService.notify(true);
       },
       function (e) { console.log('onError: ' + e.message); },
       function () { console.log('onCompleted'); }
