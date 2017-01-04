@@ -7,7 +7,7 @@ import {WS_LIST} from './ws-list';
 @Component({
   moduleId: module.id,
   selector: 'wiki-table',
-  templateUrl: 'wiki-table.html'
+  templateUrl: 'wiki-table.component.html'
 })
 export class WikiTable implements OnChanges{
   @Input()

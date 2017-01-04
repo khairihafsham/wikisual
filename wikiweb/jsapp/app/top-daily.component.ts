@@ -6,7 +6,7 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 @Component({
   moduleId: module.id,
   selector: 'top-daily',
-  templateUrl: 'top-daily.html'
+  templateUrl: 'top-daily.component.html'
 })
 export class TopDailyComponent implements OnInit {
   public dailyTopCountriesData: any = [];

@@ -6,7 +6,7 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 @Component({
   moduleId: module.id,
   selector: 'top-hourly',
-  templateUrl: 'top-hourly.html'
+  templateUrl: 'top-hourly.component.html'
 })
 export class TopHourlyComponent implements OnInit {
   private subject: WebSocketSubject<any>;
