@@ -4,6 +4,7 @@ import {WebSocketService} from './websocket.service';
 import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 
 @Component({
+  moduleId: module.id,
   selector: 'top-daily',
   templateUrl: 'top-daily.html'
 })

@@ -8,6 +8,7 @@ import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 import {WS_LIST} from './ws-list';
 
 @Component({
+  moduleId: module.id,
   selector: 'wiki-chart',
   templateUrl: 'wiki-chart.html'
 })
