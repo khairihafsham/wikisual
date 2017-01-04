@@ -131,9 +131,10 @@ WIKIWEB_JSAPP_STATIC = os.path.join(BASE_DIR, 'wikiweb', 'jsapp')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(WIKIWEB_JSAPP_STATIC),
+    os.path.join(WIKIWEB_JSAPP_STATIC, 'app'),
     os.path.join(WIKIWEB_JSAPP_STATIC, 'dist'),
-    os.path.join(WIKIWEB_JSAPP_STATIC, 'node_modules')
+    os.path.join(WIKIWEB_JSAPP_STATIC, 'node_modules'),
+    WIKIWEB_JSAPP_STATIC
 ]
 
 CHANNEL_LAYERS = {
